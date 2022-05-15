@@ -5,7 +5,7 @@ import { ChildRepository } from './child.repository';
 
 export class ChildService {
   constructor(
-    @Inject('ChildRepository') private readonly ChildRepository: ChildRepository,
+    @Inject(ChildRepository) private readonly ChildRepository: ChildRepository,
   ) { }
 
   async create(child: Child): Promise<Child> {
