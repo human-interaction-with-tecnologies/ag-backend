@@ -37,3 +37,5 @@ package-lock.json
 
 src/exec.ts
 .vscode
+
+/*.env
