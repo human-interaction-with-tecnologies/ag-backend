@@ -1,9 +1,9 @@
-import { Module } from "@nestjs/common";
-import { ProfessionalApiService } from "./adapters/api/professional-api.service";
-import { ProfessionalController } from "./adapters/api/professional.controller";
-import { ProfessionalInMemory } from "./adapters/db/professional-in-memory.repository";
-import { ProfessionalRepository } from "./domain/ports/professional.repository";
-import { ProfessionalService } from "./domain/ports/professional.service";
+import { Module } from '@nestjs/common';
+import { ProfessionalApiService } from './adapters/api/professional-api.service';
+import { ProfessionalController } from './adapters/api/professional.controller';
+import { ProfessionalInMemory } from './adapters/db/professional-in-memory.repository';
+import { ProfessionalRepository } from './domain/ports/professional.repository';
+import { ProfessionalService } from './domain/ports/professional.service';
 
 @Module({
   controllers: [ProfessionalController],
@@ -14,7 +14,7 @@ import { ProfessionalService } from "./domain/ports/professional.service";
     {
       provide: ProfessionalRepository,
       useClass: ProfessionalInMemory,
-    }
+    },
   ],
 })
-export class ProfessionalModule { }
+export class ProfessionalModule {}

@@ -1,4 +1,4 @@
-import { randomUUID } from "crypto";
+import { randomUUID } from 'crypto';
 
 export class Professional {
   id: string;
@@ -14,7 +14,6 @@ export class Professional {
   position: string;
 
   institution: string;
-
 
   constructor(
     username: string,
