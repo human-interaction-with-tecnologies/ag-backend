@@ -5,11 +5,18 @@ import { ProfessionalDto } from './professional.dto';
 
 @Injectable()
 export class ProfessionalApiService {
-  constructor(private professionalService: ProfessionalService) { }
+  constructor(private professionalService: ProfessionalService) {}
 
-  create({ username, name, email, password, position, institution }: ProfessionalDto): Promise<Professional> {
+  create({
+    username,
+    name,
+    email,
+    password,
+    position,
+    institution,
+  }: ProfessionalDto): Promise<Professional> {
     return this.professionalService.create(
-      new Professional(username, name, email, password, position, institution)
+      new Professional(username, name, email, password, position, institution),
     );
   }
 
@@ -21,10 +28,13 @@ export class ProfessionalApiService {
     return this.professionalService.findById(id);
   }
 
-  update(id: string, { username, name, email, password, position, institution }: ProfessionalDto): Promise<Professional> {
+  update(
+    id: string,
+    { username, name, email, password, position, institution }: ProfessionalDto,
+  ): Promise<Professional> {
     return this.professionalService.update(
       id,
-      new Professional(username, name, email, password, position, institution)
+      new Professional(username, name, email, password, position, institution),
     );
   }
 
