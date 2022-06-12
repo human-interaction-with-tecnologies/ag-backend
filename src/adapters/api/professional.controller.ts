@@ -7,8 +7,8 @@ import {
   Post,
   Put,
 } from '@nestjs/common';
-import { Professional } from 'src/professional/domain/model/professional.model';
-import { ProfessionalService } from 'src/professional/domain/ports/professional.service';
+import { Professional } from '@/domain/model/professional.model';
+import { ProfessionalService } from '@/adapters/api/professional.service';
 import { ProfessionalDto } from './professional.dto';
 
 @Controller({
@@ -34,10 +34,10 @@ export class ProfessionalController {
     return await this.professionalService.create(professional);
   }
 
-  @Get('/:id')
-  async findById(@Param() params): Promise<Professional> {
-    return await this.professionalService.findById(params.id);
-  }
+  // @Get('/:id')
+  // async findById(@Param() params): Promise<Professional> {
+  //   return await this.professionalService.findById(params.id);
+  // }
 
   @Get()
   async findAll(): Promise<Professional[]> {

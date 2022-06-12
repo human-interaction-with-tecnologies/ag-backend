@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
-import { Professional } from 'src/professional/domain/model/professional.model';
-import { ProfessionalService } from 'src/professional/domain/ports/professional.service';
+import { Professional } from '@/domain/model/professional.model';
+import { ProfessionalService } from '@/adapters/api/professional.service';
 import { ProfessionalDto } from './professional.dto';
 
 @Injectable()
@@ -22,10 +22,6 @@ export class ProfessionalApiService {
 
   findAll(): Promise<Professional[]> {
     return this.professionalService.findAll();
-  }
-
-  findById(id: string): Promise<Professional> {
-    return this.professionalService.findById(id);
   }
 
   update(

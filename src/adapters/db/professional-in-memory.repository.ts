@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
-import { Professional } from 'src/professional/domain/model/professional.model';
-import { ProfessionalRepository } from 'src/professional/domain/ports/professional.repository';
+import { Professional } from '@/domain/model/professional.model';
+import { ProfessionalRepository } from '@/domain/ports/professional.repository';
 
 @Injectable()
 export class ProfessionalInMemory implements ProfessionalRepository {
@@ -13,12 +13,6 @@ export class ProfessionalInMemory implements ProfessionalRepository {
 
   findAll(): Promise<Professional[]> {
     return new Promise((resolve) => resolve(this.professionals));
-  }
-
-  findById(id: string): Promise<Professional> {
-    return new Promise((resolve) =>
-      resolve(this.professionals.find((p) => p.id === id)),
-    );
   }
 
   update(id: string, professional: Professional): Promise<Professional> {

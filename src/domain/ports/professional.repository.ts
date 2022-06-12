@@ -1,13 +1,9 @@
-import { Professional } from '../model/professional.model';
+import { Professional } from '@/domain/model';
 
 export interface ProfessionalRepository {
   create(professional: Professional): Promise<Professional>;
 
   findAll(): Promise<Professional[]>;
-
-  findById(id: string): Promise<Professional>;
-
-  findByUsername(id: string): Promise<Professional>;
 
   update(id: string, professional: Professional): Promise<Professional>;
 
