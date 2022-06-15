@@ -1,5 +1,5 @@
 import { Module } from '@nestjs/common';
-import { ProfessionalController, ProfessionalService } from '@/adapters/api';
+import { ProfessionalController, ProfessionalService } from '@/professional';
 
 @Module({
   controllers: [ProfessionalController],

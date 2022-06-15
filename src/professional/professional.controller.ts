@@ -8,8 +8,8 @@ import {
   Put,
 } from '@nestjs/common';
 import { ProfessionalEntity } from '@/domain/entities/professional.entity';
-import { ProfessionalService } from '@/adapters/api/professional.service';
-import { ProfessionalDto } from './command/professional.dto';
+import { ProfessionalService } from '@/professional/professional.service';
+import { ProfessionalDto } from './dto';
 
 @Controller({
   path: 'professionals',
