@@ -1,31 +1,32 @@
-import { Inject } from '@nestjs/common';
-import { Professional } from '@/domain/model';
+import { ProfessionalEntity } from '@/domain/entities';
 import { ProfessionalRepository } from '@/domain/ports';
 import { ProfessionalUseCase } from '@/domain/ports/professional.usecase';
 
 export class ProfessionalService implements ProfessionalUseCase {
   constructor(
-    @Inject(ProfessionalRepository)
     private readonly professionalRepository: ProfessionalRepository,
   ) {}
 
-  async create(professional: Professional): Promise<Professional> {
+  async create(professional: ProfessionalEntity): Promise<ProfessionalEntity> {
     return this.professionalRepository.create(professional);
   }
 
-  async findOne(id: string): Promise<Professional> {
+  async findOne(id: string): Promise<ProfessionalEntity> {
     return this.professionalRepository.findOne(id);
   }
 
-  async findAll(): Promise<Professional[]> {
+  async findAll(): Promise<ProfessionalEntity[]> {
     return this.professionalRepository.findAll();
   }
 
-  async update(id: string, professional: Professional): Promise<Professional> {
+  async update(
+    id: string,
+    professional: ProfessionalEntity,
+  ): Promise<ProfessionalEntity> {
     return this.professionalRepository.update(id, professional);
   }
 
-  async delete(id: string): Promise<Professional> {
+  async delete(id: string): Promise<ProfessionalEntity> {
     return this.professionalRepository.delete(id);
   }
 }

@@ -1,15 +1,16 @@
-import { Professional } from '@/domain/model';
+import { ProfessionalEntity } from '@/domain/entities';
 
 export interface ProfessionalRepository {
-  create(professional: Professional): Promise<Professional>;
+  create(professional: ProfessionalEntity): Promise<ProfessionalEntity>;
 
-  findOne(email: string): Promise<Professional>;
+  findOne(email: string): Promise<ProfessionalEntity>;
 
-  findAll(): Promise<Professional[]>;
+  findAll(): Promise<ProfessionalEntity[]>;
 
-  update(id: string, professional: Professional): Promise<Professional>;
+  update(
+    id: string,
+    professional: ProfessionalEntity,
+  ): Promise<ProfessionalEntity>;
 
-  delete(id: string): Promise<Professional>;
+  delete(id: string): Promise<ProfessionalEntity>;
 }
-
-export const ProfessionalRepository = Symbol('ProfessionalRepository');

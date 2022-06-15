@@ -7,7 +7,7 @@ import {
   Post,
   Put,
 } from '@nestjs/common';
-import { Professional } from '@/domain/model/professional.model';
+import { ProfessionalEntity } from '@/domain/entities/professional.entity';
 import { ProfessionalService } from '@/adapters/api/professional.service';
 import { ProfessionalDto } from './command/professional.dto';
 
@@ -15,32 +15,35 @@ import { ProfessionalDto } from './command/professional.dto';
   path: 'professionals',
 })
 export class ProfessionalController {
-  constructor(private readonly professionalService: ProfessionalService) {}
+  constructor(
+    private readonly professionalService: ProfessionalService,
+    private professional: ProfessionalEntity,
+  ) {}
 
   @Post()
   async create(
     @Body()
     { username, name, email, password, position, institution }: ProfessionalDto,
-  ): Promise<Professional> {
-    const professional = new Professional(
+  ): Promise<ProfessionalEntity> {
+    const professional = {
       username,
       name,
       email,
       password,
       position,
       institution,
-    );
+    };
 
     return await this.professionalService.create(professional);
   }
 
   // @Get('/:id')
-  // async findById(@Param() params): Promise<Professional> {
+  // async findById(@Param() params): Promise<ProfessionalEntity> {
   //   return await this.professionalService.findById(params.id);
   // }
 
   @Get()
-  async findAll(): Promise<Professional[]> {
+  async findAll(): Promise<ProfessionalEntity[]> {
     return await this.professionalService.findAll();
   }
 
@@ -49,8 +52,8 @@ export class ProfessionalController {
     @Param() params,
     @Body()
     { username, name, email, password, position, institution }: ProfessionalDto,
-  ): Promise<Professional> {
-    const professional = new Professional(
+  ): Promise<ProfessionalEntity> {
+    const professional = new ProfessionalEntity(
       username,
       name,
       email,
@@ -63,7 +66,7 @@ export class ProfessionalController {
   }
 
   @Delete('/:id')
-  async delete(@Param() params): Promise<Professional> {
+  async delete(@Param() params): Promise<ProfessionalEntity> {
     return await this.professionalService.delete(params.id);
   }
 }

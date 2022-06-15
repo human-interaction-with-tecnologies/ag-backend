@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
-import { Professional } from '@/domain/model';
+import { ProfessionalEntity } from '@/domain/entities';
 import { ProfessionalService } from '@/adapters/api/professional.service';
 
 @Injectable()
@@ -10,7 +10,9 @@ export class AuthService {
     private jwtTokenService: JwtService,
   ) {}
 
-  async validateUserCredentials(professional: Professional): Promise<any> {
+  async validateUserCredentials(
+    professional: ProfessionalEntity,
+  ): Promise<any> {
     const professionalData = await this.profissionalService.findOne(
       professional.email,
     );
@@ -22,7 +24,7 @@ export class AuthService {
     return null;
   }
 
-  async loginWithCredentials(professional: Professional) {
+  async loginWithCredentials(professional: ProfessionalEntity) {
     const payload = { username: professional.username, sub: professional.id };
 
     return {
