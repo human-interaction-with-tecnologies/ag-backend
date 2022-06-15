@@ -11,6 +11,11 @@ export class ProfessionalInMemory implements ProfessionalRepository {
     return new Promise((resolve) => resolve(professional));
   }
 
+  findOne(email: string): Promise<Professional> {
+    const professional = this.professionals.find((p) => p.email === email);
+    return new Promise((resolve) => resolve(professional));
+  }
+
   findAll(): Promise<Professional[]> {
     return new Promise((resolve) => resolve(this.professionals));
   }

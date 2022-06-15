@@ -9,7 +9,7 @@ import {
 } from '@nestjs/common';
 import { Professional } from '@/domain/model/professional.model';
 import { ProfessionalService } from '@/adapters/api/professional.service';
-import { ProfessionalDto } from './professional.dto';
+import { ProfessionalDto } from './command/professional.dto';
 
 @Controller({
   path: 'professionals',

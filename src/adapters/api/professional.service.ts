@@ -1,8 +1,9 @@
 import { Inject } from '@nestjs/common';
 import { Professional } from '@/domain/model';
 import { ProfessionalRepository } from '@/domain/ports';
+import { ProfessionalUseCase } from '@/domain/ports/professional.usecase';
 
-export class ProfessionalService {
+export class ProfessionalService implements ProfessionalUseCase {
   constructor(
     @Inject(ProfessionalRepository)
     private readonly professionalRepository: ProfessionalRepository,
@@ -10,6 +11,10 @@ export class ProfessionalService {
 
   async create(professional: Professional): Promise<Professional> {
     return this.professionalRepository.create(professional);
+  }
+
+  async findOne(id: string): Promise<Professional> {
+    return this.professionalRepository.findOne(id);
   }
 
   async findAll(): Promise<Professional[]> {
