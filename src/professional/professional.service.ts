@@ -1,32 +1,56 @@
-import { ProfessionalEntity } from '@/domain/entities';
-import { ProfessionalRepository } from '@/domain/ports';
-import { ProfessionalUseCase } from '@/domain/ports/professional.usecase';
+import { PrismaService } from '@/prisma';
+import { Injectable } from '@nestjs/common';
+import { Professional, Prisma } from '@prisma/client';
 
-export class ProfessionalService implements ProfessionalUseCase {
-  constructor(
-    private readonly professionalRepository: ProfessionalRepository,
-  ) {}
+@Injectable()
+export class ProfessionalService {
+  constructor(private prisma: PrismaService) {}
 
-  async create(professional: ProfessionalEntity): Promise<ProfessionalEntity> {
-    return this.professionalRepository.create(professional);
+  async createProfessional(
+    data: Prisma.ProfessionalCreateInput,
+  ): Promise<Professional> {
+    return this.prisma.professional.create({ data });
   }
 
-  async findOne(id: string): Promise<ProfessionalEntity> {
-    return this.professionalRepository.findOne(id);
+  async professional(
+    professionalWhereUniqueInput: Prisma.ProfessionalWhereUniqueInput,
+  ): Promise<Professional | null> {
+    return this.prisma.professional.findUnique({
+      where: professionalWhereUniqueInput,
+    });
   }
 
-  async findAll(): Promise<ProfessionalEntity[]> {
-    return this.professionalRepository.findAll();
+  async professionals(params: {
+    skip?: number;
+    take?: number;
+    cursor?: Prisma.ProfessionalWhereUniqueInput;
+    where?: Prisma.ProfessionalWhereInput;
+    orderBy?: Prisma.ProfessionalOrderByWithRelationInput;
+  }): Promise<Professional[]> {
+    const { skip, take, cursor, where, orderBy } = params;
+    return this.prisma.professional.findMany({
+      skip,
+      take,
+      cursor,
+      where,
+      orderBy,
+    });
   }
 
-  async update(
-    id: string,
-    professional: ProfessionalEntity,
-  ): Promise<ProfessionalEntity> {
-    return this.professionalRepository.update(id, professional);
+  async updateProfessional(params: {
+    where: Prisma.ProfessionalWhereUniqueInput;
+    data: Prisma.ProfessionalUpdateInput;
+  }): Promise<Professional> {
+    const { where, data } = params;
+    return this.prisma.professional.update({
+      where,
+      data,
+    });
   }
 
-  async delete(id: string): Promise<ProfessionalEntity> {
-    return this.professionalRepository.delete(id);
+  async deleteProfessional(
+    where: Prisma.ProfessionalWhereUniqueInput,
+  ): Promise<Professional> {
+    return this.prisma.professional.delete({ where });
   }
 }
