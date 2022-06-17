@@ -1,5 +1,5 @@
 import { Controller, Post, Body } from '@nestjs/common';
-import { ProfessionalService } from '@/professional';
+import { ProfessionalService } from './professional.service';
 import { Professional as ProfessionalModel } from '@prisma/client';
 
 @Controller()
