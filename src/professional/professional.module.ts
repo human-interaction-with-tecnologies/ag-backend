@@ -1,20 +1,10 @@
+import { PrismaModule, PrismaService } from '@/prisma';
 import { Module } from '@nestjs/common';
-import { ProfessionalApiService } from './adapters/api/professional-api.service';
-import { ProfessionalController } from './adapters/api/professional.controller';
-import { ProfessionalInMemory } from './adapters/db/professional-in-memory.repository';
-import { ProfessionalRepository } from './domain/ports/professional.repository';
-import { ProfessionalService } from './domain/ports/professional.service';
+import { ProfessionalController, ProfessionalService } from '@/professional';
 
 @Module({
+  imports: [PrismaModule],
   controllers: [ProfessionalController],
-
-  providers: [
-    ProfessionalService,
-    ProfessionalApiService,
-    {
-      provide: ProfessionalRepository,
-      useClass: ProfessionalInMemory,
-    },
-  ],
+  providers: [ProfessionalService, PrismaService],
 })
 export class ProfessionalModule {}
