@@ -1,50 +1,29 @@
-import { JwtPayload } from '@/auth/interfaces';
-import { constants } from '@/common/utils';
-import { LoginStatus } from '@/http/interfaces';
 import { ProfessionalService } from '@/professional';
-import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
-import { Prisma, Professional } from '@prisma/client';
+import * as bcrypt from 'bcrypt';
+import { JwtPayload } from './interfaces/jwt-payload.interface';
 
 @Injectable()
 export class AuthService {
   constructor(
-    private readonly professionalService: ProfessionalService,
-    private readonly jwtService: JwtService,
+    private professionalService: ProfessionalService,
+    private jwtService: JwtService,
   ) {}
 
-  async login(
-    professionalWhereUniqueInput: Prisma.ProfessionalWhereUniqueInput,
-  ): Promise<LoginStatus> {
-    const user = await this.professionalService.professional(
-      professionalWhereUniqueInput,
-    );
-
-    const token = this._createToken(user);
-
-    return {
-      email: user.email,
-      ...token,
-    };
-  }
-
-  async validateUser(payload: JwtPayload): Promise<Professional> {
-    const user = await this.professionalService.professional(payload);
-
-    if (!user) {
-      throw new HttpException('Invalid token', HttpStatus.UNAUTHORIZED);
+  async validateUser(email: string, pass: string): Promise<any> {
+    const professional = await this.professionalService.professional({ email });
+    if (bcrypt.compareSync(pass, professional.password)) {
+      delete professional.password;
+      return professional;
     }
-    return user;
+    return null;
   }
 
-  private _createToken({ email }: Professional): any {
-    const expiresIn = constants.EXPIRESIN;
-
-    const user: JwtPayload = { email };
-    const accessToken = this.jwtService.sign(user);
+  async login(user: JwtPayload): Promise<any> {
+    const payload = { email: user.email, sub: user.id };
     return {
-      expiresIn,
-      accessToken,
+      access_token: this.jwtService.sign(payload),
     };
   }
 }

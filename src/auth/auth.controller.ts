@@ -1,16 +1,12 @@
-import { Controller, Body, Post } from '@nestjs/common';
-import { AuthService } from '@/auth';
-import { Prisma } from '@prisma/client';
-import { LoginStatus } from '@/http/interfaces';
+import { Controller, Request, Post } from '@nestjs/common';
+import { AuthService } from './auth.service';
 
 @Controller('auth')
 export class AuthController {
-  constructor(private readonly authService: AuthService) {}
+  constructor(private authService: AuthService) {}
 
   @Post('login')
-  public async login(
-    @Body() professionalWhereUniqueInput: Prisma.ProfessionalWhereUniqueInput,
-  ): Promise<LoginStatus> {
-    return await this.authService.login(professionalWhereUniqueInput);
+  async login(@Request() req) {
+    return this.authService.login(req.body);
   }
 }

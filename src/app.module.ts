@@ -2,7 +2,7 @@ import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { ProfessionalModule } from '@/professional';
 import { AuthModule } from '@/auth';
-import { InstitutionModule } from './institution/institution.module';
+import { InstitutionModule } from '@/institution';
 import { PrismaModule } from '@/prisma';
 
 @Module({
@@ -13,6 +13,7 @@ import { PrismaModule } from '@/prisma';
     ProfessionalModule,
     InstitutionModule,
     PrismaModule,
+    AuthModule,
   ],
 })
 export class AppModule {}

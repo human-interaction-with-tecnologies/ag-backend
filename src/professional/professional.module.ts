@@ -6,5 +6,6 @@ import { ProfessionalController, ProfessionalService } from '@/professional';
   imports: [PrismaModule],
   providers: [ProfessionalService, PrismaService],
   controllers: [ProfessionalController],
+  exports: [ProfessionalService],
 })
 export class ProfessionalModule {}
