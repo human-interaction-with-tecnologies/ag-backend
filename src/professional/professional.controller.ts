@@ -1,9 +1,10 @@
-import { Controller, Post, Body, Get, Query } from '@nestjs/common';
+import { Controller, Post, Body, Get, Query, UseGuards } from '@nestjs/common';
 import { ProfessionalService } from './professional.service';
 import {
   Professional,
   Professional as ProfessionalModel,
 } from '@prisma/client';
+import { JwtAuthGuard } from '@/auth';
 
 @Controller('professionals')
 export class ProfessionalController {
@@ -22,6 +23,7 @@ export class ProfessionalController {
     return this.professionalService.createProfessional(professionalData);
   }
 
+  @UseGuards(JwtAuthGuard)
   @Get()
   async professionals(
     @Query()

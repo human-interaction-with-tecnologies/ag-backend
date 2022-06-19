@@ -1,5 +1,5 @@
 import { ProfessionalService } from '@/professional';
-import { Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from 'bcrypt';
 import { JwtPayload } from './interfaces/jwt-payload.interface';
@@ -11,9 +11,9 @@ export class AuthService {
     private jwtService: JwtService,
   ) {}
 
-  async validateUser(email: string, pass: string): Promise<any> {
+  private async validateUser(email: string, pass: string): Promise<any> {
     const professional = await this.professionalService.professional({ email });
-    if (bcrypt.compareSync(pass, professional.password)) {
+    if (professional && bcrypt.compareSync(pass, professional.password)) {
       delete professional.password;
       return professional;
     }
@@ -21,7 +21,15 @@ export class AuthService {
   }
 
   async login(user: JwtPayload): Promise<any> {
-    const payload = { email: user.email, sub: user.id };
+    const isValidUser = await this.validateUser(user.email, user.password);
+    if (!isValidUser) {
+      throw new HttpException(
+        'Invalid email or password',
+        HttpStatus.BAD_REQUEST,
+      );
+    }
+
+    const payload = { email: isValidUser.email, sub: isValidUser.id };
     return {
       access_token: this.jwtService.sign(payload),
     };

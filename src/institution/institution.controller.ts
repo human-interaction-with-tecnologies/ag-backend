@@ -1,7 +1,9 @@
-import { Body, Controller, Get, Post, Query } from '@nestjs/common';
+import { Body, Controller, Get, Post, Query, UseGuards } from '@nestjs/common';
 import { InstitutionService } from './institution.service';
 import { Institution, Prisma } from '@prisma/client';
+import { JwtAuthGuard } from '@/auth';
 
+@UseGuards(JwtAuthGuard)
 @Controller('institutions')
 export class InstitutionController {
   constructor(private readonly institutionService: InstitutionService) {}
