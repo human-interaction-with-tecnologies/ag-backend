@@ -1,4 +1,4 @@
-import { PrismaService } from '../prisma/prisma.service';
+import { PrismaService } from '@/prisma';
 import { Injectable } from '@nestjs/common';
 import { Professional, Prisma } from '@prisma/client';
 
@@ -23,15 +23,13 @@ export class ProfessionalService {
   async professionals(params: {
     skip?: number;
     take?: number;
-    cursor?: Prisma.ProfessionalWhereUniqueInput;
     where?: Prisma.ProfessionalWhereInput;
     orderBy?: Prisma.ProfessionalOrderByWithRelationInput;
   }): Promise<Professional[]> {
-    const { skip, take, cursor, where, orderBy } = params;
+    const { skip, take, where, orderBy } = params;
     return this.prisma.professional.findMany({
       skip,
       take,
-      cursor,
       where,
       orderBy,
     });

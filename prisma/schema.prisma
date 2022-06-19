@@ -20,6 +20,8 @@ model Professional {
   Institution    Institution? @relation(fields: [institution_id], references: [id])
   created_at     DateTime     @default(now())
   updated_at     DateTime     @default(now())
+
+  @@map("professionals")
 }
 
 model Institution {
@@ -28,4 +30,6 @@ model Institution {
   created_at   DateTime       @default(now())
   updated_at   DateTime       @default(now())
   Professional Professional[]
+
+  @@map("institutions")
 }
