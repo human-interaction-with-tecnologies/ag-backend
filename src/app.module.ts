@@ -4,6 +4,7 @@ import { ProfessionalModule } from '@/professional';
 import { AuthModule } from '@/auth';
 import { InstitutionModule } from '@/institution';
 import { PrismaModule } from '@/prisma';
+import { ChildModule } from '@/child';
 
 @Module({
   imports: [
@@ -13,6 +14,7 @@ import { PrismaModule } from '@/prisma';
     ProfessionalModule,
     InstitutionModule,
     PrismaModule,
+    ChildModule,
     AuthModule,
   ],
 })
