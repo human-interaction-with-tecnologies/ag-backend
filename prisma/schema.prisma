@@ -10,16 +10,27 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+enum KindOfHandicap {
+  PHYSICAL
+  MENTAL
+  VISUAL
+  HEARING
+  SPEECH
+  MULTIPLE
+  OTHER
+}
+
 model Professional {
-  id             String       @id @default(cuid())
-  name           String
-  email          String       @unique
-  password       String
-  position       String?
-  institution_id String?
-  Institution    Institution? @relation(fields: [institution_id], references: [id])
-  created_at     DateTime     @default(now())
-  updated_at     DateTime     @default(now())
+  id                   String                  @id @default(cuid())
+  name                 String
+  email                String                  @unique
+  password             String
+  position             String?
+  fk_institution_id    String?
+  Institution          Institution?            @relation(fields: [fk_institution_id], references: [id])
+  created_at           DateTime                @default(now())
+  updated_at           DateTime                @default(now())
+  ChildrenProfessional ChildrenProfessionals[]
 
   @@map("professionals")
 }
@@ -32,4 +43,31 @@ model Institution {
   Professional Professional[]
 
   @@map("institutions")
+}
+
+model Children {
+  id                   String                  @id @default(cuid())
+  name                 String
+  username             String
+  identification       String?                 @unique
+  diagnosis            String?
+  date_of_birth        DateTime
+  kind_of_handicap     KindOfHandicap
+  created_at           DateTime                @default(now())
+  updated_at           DateTime                @default(now())
+  ChildrenProfessional ChildrenProfessionals[]
+
+  @@map("childrens")
+}
+
+model ChildrenProfessionals {
+  fk_child_id        String
+  fk_professional_id String
+  created_at         DateTime     @default(now())
+  updated_at         DateTime     @default(now())
+  Children           Children     @relation(fields: [fk_child_id], references: [id])
+  Professional       Professional @relation(fields: [fk_professional_id], references: [id])
+
+  @@id([fk_child_id, fk_professional_id])
+  @@map("children_professionals")
 }
