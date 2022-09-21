@@ -31,6 +31,8 @@ model Professional {
   created_at           DateTime                @default(now())
   updated_at           DateTime                @default(now())
   ChildrenProfessional ChildrenProfessionals[]
+  GameData             GameData[]
+  MatchHistory         MatchHistory[]
 
   @@map("professionals")
 }
@@ -56,6 +58,8 @@ model Children {
   created_at           DateTime                @default(now())
   updated_at           DateTime                @default(now())
   ChildrenProfessional ChildrenProfessionals[]
+  GameData             GameData[]
+  MatchHistory         MatchHistory[]
 
   @@map("childrens")
 }
@@ -70,4 +74,75 @@ model ChildrenProfessionals {
 
   @@id([fk_child_id, fk_professional_id])
   @@map("children_professionals")
+}
+
+model Game {
+  id                  String         @id @default(cuid())
+  name                String
+  fk_game_category_id String?
+  fk_theme_id         String?
+  created_at          DateTime       @default(now())
+  updated_at          DateTime       @default(now())
+  GameData            GameData[]
+  GameCategory        GameCategory?  @relation(fields: [fk_game_category_id], references: [id])
+  MatchHistory        MatchHistory[]
+  Theme               Theme?         @relation(fields: [fk_theme_id], references: [id])
+
+  @@map("games")
+}
+
+model GameData {
+  id                 String         @id @default(cuid())
+  game_settings      String         @default("{}")
+  fk_child_id        String
+  fk_professional_id String
+  fk_game_id         String
+  fk_theme_id        String?
+  created_at         DateTime       @default(now())
+  updated_at         DateTime       @default(now())
+  Children           Children       @relation(fields: [fk_child_id], references: [id])
+  Professional       Professional   @relation(fields: [fk_professional_id], references: [id])
+  Game               Game           @relation(fields: [fk_game_id], references: [id])
+  Theme              Theme?         @relation(fields: [fk_theme_id], references: [id])
+  MatchHistory       MatchHistory[]
+
+  @@map("game_data")
+}
+
+model GameCategory {
+  id         String   @id @default(cuid())
+  name       String
+  created_at DateTime @default(now())
+  updated_at DateTime @default(now())
+  Game       Game[]
+
+  @@map("games_categories")
+}
+
+model MatchHistory {
+  id                 String       @id @default(cuid())
+  game_settings      String       @default("{}")
+  fk_child_id        String
+  fk_professional_id String
+  fk_game_id         String
+  fk_game_data_id    String
+  created_at         DateTime     @default(now())
+  updated_at         DateTime     @default(now())
+  Children           Children     @relation(fields: [fk_child_id], references: [id])
+  Professional       Professional @relation(fields: [fk_professional_id], references: [id])
+  Game               Game         @relation(fields: [fk_game_id], references: [id])
+  GameData           GameData     @relation(fields: [fk_game_data_id], references: [id])
+
+  @@map("match_history")
+}
+
+model Theme {
+  id         String     @id @default(cuid())
+  name       String
+  created_at DateTime   @default(now())
+  updated_at DateTime   @default(now())
+  GameData   GameData[]
+  Game       Game[]
+
+  @@map("themes")
 }
