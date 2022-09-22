@@ -143,6 +143,18 @@ model Theme {
   updated_at DateTime   @default(now())
   GameData   GameData[]
   Game       Game[]
+  Media      Media[]
 
   @@map("themes")
+}
+
+model Media {
+  id           String   @id @default(cuid())
+  name         String
+  src          String
+  local_layout String?
+  fk_theme_id  String?
+  created_at   DateTime @default(now())
+  updated_at   DateTime @default(now())
+  Theme        Theme?   @relation(fields: [fk_theme_id], references: [id])
 }
