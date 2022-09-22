@@ -165,6 +165,8 @@ model Media {
   created_at   DateTime @default(now())
   updated_at   DateTime @default(now())
   Theme        Theme?   @relation(fields: [fk_theme_id], references: [id])
+
+  @@map("medias")
 }
 
 model Group {
