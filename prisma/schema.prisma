@@ -99,19 +99,18 @@ model Game {
 }
 
 model GameData {
-  id                 String         @id @default(cuid())
-  game_settings      String         @default("{}")
+  id                 String       @id @default(cuid())
+  game_settings      String       @default("{}")
   fk_child_id        String
   fk_professional_id String
   fk_game_id         String
   fk_theme_id        String?
-  created_at         DateTime       @default(now())
-  updated_at         DateTime       @default(now())
-  Children           Children       @relation(fields: [fk_child_id], references: [id])
-  Professional       Professional   @relation(fields: [fk_professional_id], references: [id])
-  Game               Game           @relation(fields: [fk_game_id], references: [id])
-  Theme              Theme?         @relation(fields: [fk_theme_id], references: [id])
-  MatchHistory       MatchHistory[]
+  created_at         DateTime     @default(now())
+  updated_at         DateTime     @default(now())
+  Children           Children     @relation(fields: [fk_child_id], references: [id])
+  Professional       Professional @relation(fields: [fk_professional_id], references: [id])
+  Game               Game         @relation(fields: [fk_game_id], references: [id])
+  Theme              Theme?       @relation(fields: [fk_theme_id], references: [id])
 
   @@map("game_data")
 }
@@ -132,13 +131,11 @@ model MatchHistory {
   fk_child_id        String
   fk_professional_id String
   fk_game_id         String
-  fk_game_data_id    String
   created_at         DateTime     @default(now())
   updated_at         DateTime     @default(now())
   Children           Children     @relation(fields: [fk_child_id], references: [id])
   Professional       Professional @relation(fields: [fk_professional_id], references: [id])
   Game               Game         @relation(fields: [fk_game_id], references: [id])
-  GameData           GameData     @relation(fields: [fk_game_data_id], references: [id])
 
   @@map("match_history")
 }
