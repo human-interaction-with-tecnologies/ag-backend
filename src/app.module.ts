@@ -5,6 +5,7 @@ import { AuthModule } from '@/auth';
 import { InstitutionModule } from '@/institution';
 import { PrismaModule } from '@/prisma';
 import { ChildModule } from '@/child';
+import { GameModule } from './game';
 
 @Module({
   imports: [
@@ -16,6 +17,7 @@ import { ChildModule } from '@/child';
     PrismaModule,
     ChildModule,
     AuthModule,
+    GameModule,
   ],
 })
 export class AppModule {}
