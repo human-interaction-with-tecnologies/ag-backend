@@ -23,7 +23,15 @@ export class ChildController {
     return this.childService.children({
       skip: +skip || 0,
       take: +perPage || 10,
-      where: search ? { name: { contains: search } } : undefined,
+      where: search
+        ? {
+            OR: [
+              { name: { contains: search } },
+              { username: { contains: search } },
+              { diagnosis: { contains: search } },
+            ],
+          }
+        : undefined,
       orderBy: orderBy ? { [orderBy]: order ?? 'asc' } : undefined,
     });
   }
