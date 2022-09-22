@@ -13,15 +13,17 @@ export class ChildService {
     orderBy?: Prisma.ChildrenOrderByWithAggregationInput;
   }): Promise<Children[]> {
     const { skip, take, where, orderBy } = params;
-    return this.prisma.children.findMany({
+    const litedChildren = await this.prisma.children.findMany({
       skip,
       take,
       where,
       orderBy,
     });
+    return litedChildren;
   }
 
   async createChild(data: Prisma.ChildrenCreateInput): Promise<Children> {
-    return this.prisma.children.create({ data });
+    const hasChildCreated = await this.prisma.children.create({ data });
+    return hasChildCreated;
   }
 }

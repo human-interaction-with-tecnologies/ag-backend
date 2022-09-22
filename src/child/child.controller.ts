@@ -1,4 +1,12 @@
-import { Body, Controller, Get, Post, Query, UseGuards } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  Post,
+  Query,
+  Res,
+  UseGuards,
+} from '@nestjs/common';
 import { ChildService } from './child.service';
 import { Children, Prisma } from '@prisma/client';
 import { JwtAuthGuard } from '@/auth';
@@ -40,7 +48,15 @@ export class ChildController {
   async createChild(
     @Body()
     data: Prisma.ChildrenCreateInput,
+    @Res() res: any,
   ): Promise<Children> {
-    return this.childService.createChild(data);
+    try {
+      const hasChildCreated = await this.childService.createChild(data);
+      return hasChildCreated;
+    } catch (err) {
+      return res.status(400).send({
+        message: err.message,
+      });
+    }
   }
 }
