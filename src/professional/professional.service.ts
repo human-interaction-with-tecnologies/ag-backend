@@ -1,6 +1,11 @@
 import { PrismaService } from '@/prisma';
 import { Injectable } from '@nestjs/common';
-import { Professional, Prisma } from '@prisma/client';
+import {
+  Professional,
+  Prisma,
+  Children,
+  ChildrenProfessionals,
+} from '@prisma/client';
 
 @Injectable()
 export class ProfessionalService {
@@ -50,5 +55,37 @@ export class ProfessionalService {
     where: Prisma.ProfessionalWhereUniqueInput,
   ): Promise<Professional> {
     return this.prisma.professional.delete({ where });
+  }
+
+  async listProfessionalChildren(params: {
+    where: Prisma.ChildrenProfessionalsWhereInput;
+    skip?: number;
+    take?: number;
+    orderBy?: Prisma.ChildrenOrderByWithRelationInput;
+  }): Promise<Children[]> {
+    const { where, skip, take, orderBy } = params;
+    return this.prisma.children.findMany({
+      where: {
+        ChildrenProfessional: {
+          some: where,
+        },
+      },
+      skip,
+      take,
+      orderBy,
+    });
+  }
+
+  async addChildrenToProfessional(params: {
+    professionalId: string;
+    childId: string;
+  }): Promise<ChildrenProfessionals> {
+    const { professionalId, childId } = params;
+    return this.prisma.childrenProfessionals.create({
+      data: {
+        fk_child_id: childId,
+        fk_professional_id: professionalId,
+      },
+    });
   }
 }
