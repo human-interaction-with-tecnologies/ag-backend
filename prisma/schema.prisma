@@ -60,7 +60,7 @@ model Children {
   identification       String?                 @unique
   diagnosis            String?
   date_of_birth        DateTime
-  kind_of_handicap     KindOfHandicap
+  kind_of_handicap     KindOfHandicap          @default(OTHER)
   created_at           DateTime                @default(now())
   updated_at           DateTime                @default(now())
   ChildrenProfessional ChildrenProfessionals[]
