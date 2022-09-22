@@ -10,7 +10,7 @@ export class InstitutionService {
     skip?: number;
     take?: number;
     where?: Prisma.InstitutionWhereInput;
-    orderBy?: Prisma.ProfessionalOrderByWithRelationInput;
+    orderBy?: Prisma.InstitutionOrderByWithRelationInput;
   }): Promise<Institution[]> {
     const { skip, take, where, orderBy } = params;
     return this.prisma.institution.findMany({

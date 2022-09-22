@@ -10,16 +10,35 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+enum KindOfHandicap {
+  PHYSICAL
+  MENTAL
+  VISUAL
+  HEARING
+  SPEECH
+  MULTIPLE
+  OTHER
+}
+
+enum GroupType {
+  PROFESSIONAL
+  CHILD
+}
+
 model Professional {
-  id             String       @id @default(cuid())
-  name           String
-  email          String       @unique
-  password       String
-  position       String?
-  institution_id String?
-  Institution    Institution? @relation(fields: [institution_id], references: [id])
-  created_at     DateTime     @default(now())
-  updated_at     DateTime     @default(now())
+  id                   String                  @id @default(cuid())
+  name                 String
+  email                String                  @unique
+  password             String
+  position             String?
+  fk_institution_id    String?
+  Institution          Institution?            @relation(fields: [fk_institution_id], references: [id])
+  created_at           DateTime                @default(now())
+  updated_at           DateTime                @default(now())
+  ChildrenProfessional ChildrenProfessionals[]
+  GameData             GameData[]
+  MatchHistory         MatchHistory[]
+  GroupProfessional    GroupProfessional[]
 
   @@map("professionals")
 }
@@ -32,4 +51,167 @@ model Institution {
   Professional Professional[]
 
   @@map("institutions")
+}
+
+model Children {
+  id                   String                  @id @default(cuid())
+  name                 String
+  username             String
+  identification       String?                 @unique
+  diagnosis            String?
+  date_of_birth        DateTime
+  kind_of_handicap     KindOfHandicap
+  created_at           DateTime                @default(now())
+  updated_at           DateTime                @default(now())
+  ChildrenProfessional ChildrenProfessionals[]
+  GameData             GameData[]
+  MatchHistory         MatchHistory[]
+  GroupChild           GroupChild[]
+
+  @@map("childrens")
+}
+
+model ChildrenProfessionals {
+  fk_child_id        String
+  fk_professional_id String
+  created_at         DateTime     @default(now())
+  updated_at         DateTime     @default(now())
+  Children           Children     @relation(fields: [fk_child_id], references: [id])
+  Professional       Professional @relation(fields: [fk_professional_id], references: [id])
+
+  @@id([fk_child_id, fk_professional_id])
+  @@map("children_professionals")
+}
+
+model Game {
+  id                  String         @id @default(cuid())
+  name                String
+  fk_game_category_id String?
+  fk_theme_id         String?
+  created_at          DateTime       @default(now())
+  updated_at          DateTime       @default(now())
+  GameData            GameData[]
+  GameCategory        GameCategory?  @relation(fields: [fk_game_category_id], references: [id])
+  MatchHistory        MatchHistory[]
+  Theme               Theme?         @relation(fields: [fk_theme_id], references: [id])
+
+  @@map("games")
+}
+
+model GameData {
+  id                 String       @id @default(cuid())
+  game_settings      String       @default("{}")
+  fk_child_id        String
+  fk_professional_id String
+  fk_game_id         String
+  fk_theme_id        String?
+  created_at         DateTime     @default(now())
+  updated_at         DateTime     @default(now())
+  Children           Children     @relation(fields: [fk_child_id], references: [id])
+  Professional       Professional @relation(fields: [fk_professional_id], references: [id])
+  Game               Game         @relation(fields: [fk_game_id], references: [id])
+  Theme              Theme?       @relation(fields: [fk_theme_id], references: [id])
+
+  @@map("game_data")
+}
+
+model GameCategory {
+  id         String   @id @default(cuid())
+  name       String
+  created_at DateTime @default(now())
+  updated_at DateTime @default(now())
+  Game       Game[]
+
+  @@map("games_categories")
+}
+
+model MatchHistory {
+  id                 String       @id @default(cuid())
+  game_settings      String       @default("{}")
+  fk_child_id        String
+  fk_professional_id String
+  fk_game_id         String
+  created_at         DateTime     @default(now())
+  updated_at         DateTime     @default(now())
+  Children           Children     @relation(fields: [fk_child_id], references: [id])
+  Professional       Professional @relation(fields: [fk_professional_id], references: [id])
+  Game               Game         @relation(fields: [fk_game_id], references: [id])
+
+  @@map("match_history")
+}
+
+model Theme {
+  id         String       @id @default(cuid())
+  name       String
+  created_at DateTime     @default(now())
+  updated_at DateTime     @default(now())
+  GameData   GameData[]
+  Game       Game[]
+  Media      Media[]
+  GroupTheme GroupTheme[]
+
+  @@map("themes")
+}
+
+model Media {
+  id           String   @id @default(cuid())
+  name         String
+  src          String
+  local_layout String?
+  fk_theme_id  String?
+  created_at   DateTime @default(now())
+  updated_at   DateTime @default(now())
+  Theme        Theme?   @relation(fields: [fk_theme_id], references: [id])
+
+  @@map("medias")
+}
+
+model Group {
+  id                 String              @id @default(cuid())
+  name               String
+  fk_professional_id String
+  group_type         GroupType
+  created_at         DateTime            @default(now())
+  updated_at         DateTime            @default(now())
+  GroupTheme         GroupTheme[]
+  GroupChild         GroupChild[]
+  GroupProfessional  GroupProfessional[]
+
+  @@map("groups")
+}
+
+model GroupTheme {
+  fk_group_id String
+  fk_theme_id String
+  created_at  DateTime @default(now())
+  updated_at  DateTime @default(now())
+  Group       Group    @relation(fields: [fk_group_id], references: [id])
+  Theme       Theme    @relation(fields: [fk_theme_id], references: [id])
+
+  @@id([fk_group_id, fk_theme_id])
+  @@map("groups_themes")
+}
+
+model GroupChild {
+  fk_group_id String
+  fk_child_id String
+  created_at  DateTime @default(now())
+  updated_at  DateTime @default(now())
+  Group       Group    @relation(fields: [fk_group_id], references: [id])
+  Children    Children @relation(fields: [fk_child_id], references: [id])
+
+  @@id([fk_group_id, fk_child_id])
+  @@map("groups_children")
+}
+
+model GroupProfessional {
+  fk_group_id        String
+  fk_professional_id String
+  created_at         DateTime     @default(now())
+  updated_at         DateTime     @default(now())
+  Group              Group        @relation(fields: [fk_group_id], references: [id])
+  Professional       Professional @relation(fields: [fk_professional_id], references: [id])
+
+  @@id([fk_group_id, fk_professional_id])
+  @@map("groups_professionals")
 }
