@@ -20,6 +20,11 @@ enum KindOfHandicap {
   OTHER
 }
 
+enum GroupType {
+  PROFESSIONAL
+  CHILD
+}
+
 model Professional {
   id                   String                  @id @default(cuid())
   name                 String
@@ -33,6 +38,7 @@ model Professional {
   ChildrenProfessional ChildrenProfessionals[]
   GameData             GameData[]
   MatchHistory         MatchHistory[]
+  GroupProfessional    GroupProfessional[]
 
   @@map("professionals")
 }
@@ -60,6 +66,7 @@ model Children {
   ChildrenProfessional ChildrenProfessionals[]
   GameData             GameData[]
   MatchHistory         MatchHistory[]
+  GroupChild           GroupChild[]
 
   @@map("childrens")
 }
@@ -137,13 +144,14 @@ model MatchHistory {
 }
 
 model Theme {
-  id         String     @id @default(cuid())
+  id         String       @id @default(cuid())
   name       String
-  created_at DateTime   @default(now())
-  updated_at DateTime   @default(now())
+  created_at DateTime     @default(now())
+  updated_at DateTime     @default(now())
   GameData   GameData[]
   Game       Game[]
   Media      Media[]
+  GroupTheme GroupTheme[]
 
   @@map("themes")
 }
@@ -157,4 +165,54 @@ model Media {
   created_at   DateTime @default(now())
   updated_at   DateTime @default(now())
   Theme        Theme?   @relation(fields: [fk_theme_id], references: [id])
+}
+
+model Group {
+  id                 String              @id @default(cuid())
+  name               String
+  fk_professional_id String
+  group_type         GroupType
+  created_at         DateTime            @default(now())
+  updated_at         DateTime            @default(now())
+  GroupTheme         GroupTheme[]
+  GroupChild         GroupChild[]
+  GroupProfessional  GroupProfessional[]
+
+  @@map("groups")
+}
+
+model GroupTheme {
+  fk_group_id String
+  fk_theme_id String
+  created_at  DateTime @default(now())
+  updated_at  DateTime @default(now())
+  Group       Group    @relation(fields: [fk_group_id], references: [id])
+  Theme       Theme    @relation(fields: [fk_theme_id], references: [id])
+
+  @@id([fk_group_id, fk_theme_id])
+  @@map("groups_themes")
+}
+
+model GroupChild {
+  fk_group_id String
+  fk_child_id String
+  created_at  DateTime @default(now())
+  updated_at  DateTime @default(now())
+  Group       Group    @relation(fields: [fk_group_id], references: [id])
+  Children    Children @relation(fields: [fk_child_id], references: [id])
+
+  @@id([fk_group_id, fk_child_id])
+  @@map("groups_children")
+}
+
+model GroupProfessional {
+  fk_group_id        String
+  fk_professional_id String
+  created_at         DateTime     @default(now())
+  updated_at         DateTime     @default(now())
+  Group              Group        @relation(fields: [fk_group_id], references: [id])
+  Professional       Professional @relation(fields: [fk_professional_id], references: [id])
+
+  @@id([fk_group_id, fk_professional_id])
+  @@map("groups_professionals")
 }
